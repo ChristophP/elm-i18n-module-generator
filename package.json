@@ -1,0 +1,16 @@
+{
+  "name": "elm-i18n-module-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "elm": "^0.18.0",
+    "fs-extra": "^2.1.2",
+    "ramda": "^0.23.0"
+  }
+}
