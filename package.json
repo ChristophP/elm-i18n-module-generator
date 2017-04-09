@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "debug": "^2.6.3",
     "elm": "^0.18.0",
     "fs-extra": "^2.1.2",
     "ramda": "^0.23.0"
