@@ -20,10 +20,6 @@ const getLnFromCode =
 getLnFromCode code =
    case code of \n${R.pipe(R.map(lnCase), R.join('\n'))(languages)}`;
 
-// create Translation Dir
-// add a locale Dir for each language
-fs.ensureDirSync(trDir);
-
 const getFileContent =
   filename => fs.readJsonSync(path.join(__dirname, '../locale/', filename), 'utf8');
 
@@ -49,15 +45,27 @@ ${index} lang =
 `;
 };
 
-const processFileContent = R.pipe(R.toPairs, R.map(generateElmFunctions));
+const processFileContent = filename => {
+  const lang = getLangFromFile(filename);
+}
 
-files.forEach(filename => {
-  R.pipe(
+const createFileContentPairs = R.chain(
+  filename => R.pipe(
     getFileContent,
-    processFileContent,
-    writeFileContent(filename)
-  )(filename);
-});
+    R.mapObjIndexed((value, key) => ({ ln: getLangFromFile(filename), key, value })),
+    R.values
+  )(filename)
+);
+
+const fileContentMap = R.pipe(
+  createFileContentPairs,
+  R.groupBy(R.prop('key'))
+)(files);
+
+console.log(fileContentMap)
+process.exit(0)
+//writeFileContent(filename)
+
 
 process.exit(0)
 
