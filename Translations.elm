@@ -1,4 +1,4 @@
-module Translations
+module Translations exposing (..)
 
 type Lang
   =  De
@@ -11,13 +11,13 @@ getLnFromCode code =
       "en" -> En
 
 hello: Lang -> String
-hello lang =
+hello lang  =
   case lang of 
       De -> "Hallo"
       En -> "Hello"
 
-gooddaySalute: Lang -> String
-gooddaySalute lang =
+gooddaySalute: Lang -> String -> String -> String
+gooddaySalute lang str0 str1 =
   case lang of 
-      De -> "Guten Tag {name}"
-      En -> "Good Day {name}"
+      De -> "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
+      En -> "Good Day " ++ str0 ++ " " ++ str1 ++ ""

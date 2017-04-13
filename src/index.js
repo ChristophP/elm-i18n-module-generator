@@ -1,11 +1,15 @@
 const fs = require('fs-extra');
 const path = require('path');
 
+const argv = require('yargs').argv;
 const R = require('ramda');
 
-const trFile = path.join(__dirname, '../Translations.elm');
+const [
+  localeDir = path.join(__dirname, '../locale'),
+  trFile = path.join(__dirname, '../Translations.elm'),
+] = argv._;
 
-const files = fs.readdirSync(path.join(__dirname, '../locale'))
+const files = fs.readdirSync(localeDir)
 const getLangFromFile = R.pipe(R.split('.'), R.slice(1, 2), R.head);
 const languages = R.map(getLangFromFile)(files);
 const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1);
@@ -28,7 +32,7 @@ getLnFromCode code =
    case code of \n${R.pipe(R.map(lnCase), R.join('\n'))(languages)}`;
 
 const getFileContent =
-  filename => fs.readJsonSync(path.join(__dirname, '../locale/', filename), 'utf8');
+  filename => fs.readJsonSync(path.join(localeDir, filename), 'utf8');
 
 const writeFileContent = content => {
   const generateTrElmModule = (snippets) =>
@@ -44,14 +48,41 @@ ${R.join('\n\n', snippets)}`;
 };
 
 const trCase = ({ ln, value }) => `      ${capitalize(ln)} -> "${value}"`;
-const generateElmFunctions = (translations, key) =>
-  `${key}: Lang -> String
-${key} lang =
-  case lang of \n${R.pipe(R.map(trCase), R.join('\n'))(translations)}`;
+
+const generateElmFunctions = (translations, key) => {
+  const placeholderRegex = /\{\{.*?\}\}/;
+  const placeholderRegexGlobal = /\{\{.*?\}\}/g;
+  const [{ value: firstTr }] = translations;
+  const matches = firstTr.match(placeholderRegexGlobal) || [];
+  const signatureStrings = R.pipe(R.repeat('String'), R.join(' -> '));
+  const args = R.pipe(
+    R.addIndex(R.map)((match, index) => ('str' + index)),
+    R.join(' ')
+  );
+  const replacePlaceholdersWrapper = (str) => replacePlaceholders(str, 0);
+  const replacePlaceholders = (str, level) => {
+    if (R.test(placeholderRegex, str)) {
+      const newStr = R.replace(placeholderRegex, `" ++ str${level} ++ "`, str);
+      return replacePlaceholders(newStr, level + 1);
+    }
+    return str;
+  };
+  const strings = R.pipe(
+    R.map(R.pipe((translation) => (
+      R.merge(translation, {
+        value: replacePlaceholdersWrapper(translation.value)
+      })
+    ), trCase)),
+    R.join('\n')
+  );
+  return `${key}: Lang -> ${signatureStrings(matches.length + 1)}
+${key} lang ${args(matches)} =
+  case lang of \n${strings(translations)}`;
+};
 
 const processFileContent = filename => {
   const lang = getLangFromFile(filename);
-}
+};
 
 const createFileContentPairs = R.chain(
   filename => R.pipe(

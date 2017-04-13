@@ -13,18 +13,18 @@ generator was born.
 
 ## How to use?
 
-!!! Disclaimer: This module is only really useful when I finish string
-interpolation. Currently this generator only supports constant language strings.
-Currently all translation functions have this signature.
+Warning: This module currently only supports super simple JSON translation files
+that are only on level deep. I still need to implement something that
+converts nested keys to camel case. Also it only supports placeholders in
+translations that are surrounded by `{{ ... }}`. Translations without
+placeholders will be transformed to a function with this signature.
 
 `Lang -> String`
 
-Placeholders will not work. They would need a signature like this
+With Placeholders the signature will look more like this:
 (for one placeholder):
 
 `Lang -> String -> String`
-
-I hope I can finish that within the next weeks.
 
 ### Generating the Translation elm module
 
@@ -60,7 +60,7 @@ in english and in german
 This will generate a `Translations.elm` file with the follwing content.
 
 ```
-module Translations
+module Translations exposing (..)
 
 type Lang
   =  De
@@ -73,16 +73,16 @@ getLnFromCode code =
       "en" -> En
 
 hello: Lang -> String
-hello lang =
+hello lang  =
   case lang of
       De -> "Hallo"
       En -> "Hello"
 
-gooddaySalute: Lang -> String
-gooddaySalute lang =
+gooddaySalute: Lang -> String -> String -> String
+gooddaySalute lang str0 str1 =
   case lang of
-      De -> "Guten Tag {name}"
-      En -> "Good Day {name}"
+      De -> "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
+      En -> "Good Day " ++ str0 ++ " " ++ str1 ++ ""
 ```
 
 ### Using the Translations module
@@ -113,7 +113,8 @@ view model = div [] [text (Translations.hello model.lang)]
 This is a list of TODOs that I plan to implement. Pull Requests are also
 welcome. Just contact me if you want to contribute.
 
-- Extend for use with placeholders
+- camel case nested props
+- Clean up
 - Put this in an npm package with a bin script
 - Use command line arguments to configure input folder, output file and
 Placeholder separator

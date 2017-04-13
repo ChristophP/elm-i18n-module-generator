@@ -1,4 +1,4 @@
 {
   "hello": "Hallo",
-  "gooddaySalute": "Guten Tag {name}"
+  "gooddaySalute": "Guten Tag {{name}} {{assi}}"
 }
