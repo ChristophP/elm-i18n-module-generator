@@ -3,16 +3,23 @@ const path = require('path');
 
 const R = require('ramda');
 
-const trDir = path.join(__dirname, '../Translations');
+const trFile = path.join(__dirname, '../Translations.elm');
 
 const files = fs.readdirSync(path.join(__dirname, '../locale'))
 const getLangFromFile = R.pipe(R.split('.'), R.slice(1, 2), R.head);
 const languages = R.map(getLangFromFile)(files);
 const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1);
 
-const tags = R.pipe(R.map(R.pipe(capitalize, R.concat('  | '))), R.join('\n'));
+const tags = R.pipe(
+  R.addIndex(R.map)(
+    (tag, index) => {
+      const concatVal = index !== 0 ? '  |  ' : '  =  ';
+      return R.pipe(capitalize, R.concat(concatVal))(tag);
+    }),
+  R.join('\n')
+);
 const unionType =
-`type Lang = \n${tags(languages)}`;
+`type Lang\n${tags(languages)}`;
 
 const lnCase = ln => `      "${ln}" -> ${capitalize(ln)}`;
 const getLnFromCode =
@@ -23,27 +30,24 @@ getLnFromCode code =
 const getFileContent =
   filename => fs.readJsonSync(path.join(__dirname, '../locale/', filename), 'utf8');
 
-const writeFileContent = filename => content => {
-  const generateTrElmModule = (snippets) => {
-    return `
-module Translations
+const writeFileContent = content => {
+  const generateTrElmModule = (snippets) =>
+    `module Translations
 
 ${unionType}
 
 ${getLnFromCode}
 
-${R.join('\n\n', content)}`
-  };
-  fs.writeFileSync(path.join(trDir + '.elm'), generateTrElmModule(content), 'utf8')
+${R.join('\n\n', snippets)}`;
+
+  fs.writeFileSync(trFile, generateTrElmModule(content), 'utf8')
 };
 
-const trCase = tr => `      ${capitalize(tr)} -> `;
-const generateElmFunctions = ([index, value]) => {
-  return `${index}: Lang -> String
-${index} lang =
-  case lang of \n${R.pipe(R.map(trCase), R.concat(R.__, value), R.join('\n'))}
-`;
-};
+const trCase = ({ ln, value }) => `      ${capitalize(ln)} -> "${value}"`;
+const generateElmFunctions = (translations, key) =>
+  `${key}: Lang -> String
+${key} lang =
+  case lang of \n${R.pipe(R.map(trCase), R.join('\n'))(translations)}`;
 
 const processFileContent = filename => {
   const lang = getLangFromFile(filename);
@@ -62,10 +66,10 @@ const fileContentMap = R.pipe(
   R.groupBy(R.prop('key'))
 )(files);
 
-console.log(fileContentMap)
+const createSnippets = R.pipe(
+  R.mapObjIndexed(generateElmFunctions),
+  R.values
+);
+
+writeFileContent(createSnippets(fileContentMap));
 process.exit(0)
-//writeFileContent(filename)
-
-
-process.exit(0)
-

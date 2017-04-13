@@ -1,9 +1,8 @@
-
 module Translations
 
-type Lang = 
-  | De
-  | En
+type Lang
+  =  De
+  |  En
 
 getLnFromCode: String -> Lang
 getLnFromCode code =
@@ -14,10 +13,11 @@ getLnFromCode code =
 hello: Lang -> String
 hello lang =
   case lang of 
-function (a0) { return fn.apply(this, arguments); }
-
+      De -> "Hallo"
+      En -> "Hello"
 
 gooddaySalute: Lang -> String
 gooddaySalute lang =
   case lang of 
-function (a0) { return fn.apply(this, arguments); }
+      De -> "Guten Tag {name}"
+      En -> "Good Day {name}"
