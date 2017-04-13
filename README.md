@@ -1,17 +1,32 @@
-# ELm i18n Module Generator
+# Elm i18n Module Generator
 
 This repo provides a script that can generate elm functions from JSON
 translation files.
 
 ## Why is this necessary?
 
-The company I work for stored all their translation files in JSON and also
-depends on this format for collaboration with third party translation service.
-So storing the translations in Elm directly was not an option for us. We still
-didn't want to miss out on the Elm goodness. Thus, this i18n module generator
-was born.
+The company I work for stores all their translation files in JSON and also
+depends on this format, for collaboration with a third party translation
+service. So storing the translations in Elm directly was not an option for us.
+We still didn't want to miss out on the Elm goodness. Thus, this i18n module
+generator was born.
 
 ## How to use?
+
+!!! Disclaimer: This module is only really useful when I finish string
+interpolation. Currently this generator only supports constant language strings.
+Currently all translation functions have this signature.
+
+`Lang -> String`
+
+Placeholders will not work. They would need a signature like this
+(for one placeholder):
+
+`Lang -> String -> String`
+
+I hope I can finish that within the next weeks.
+
+### Generating the Translation elm module
 
 Clone this repo. Run the `index.js` Script in the `src` folder.
 
@@ -27,7 +42,7 @@ locale
   ...
 ```
 
-Imagine the translation files look liek this:
+Imagine the translation files look like this:
 ```
 {
   "hello": "Hello",
@@ -70,10 +85,38 @@ gooddaySalute lang =
       En -> "Good Day {name}"
 ```
 
+### Using the Translations module
+
+Import the generated module in your elm code like this.
+
+```import Translations```
+
+Initialize your Model with a language, it is a union type generated from your
+language files:
+
+```
+initialModel: Model
+initialModel =
+  { tigers: List Tiger
+  , lang: Translations.En -- <---- add language type
+  }
+```
+
+Then in your view function do this:
+```
+view: Model -> Html Msg
+view model = div [] [text (Translations.hello model.lang)]
+```
+
 ## Future Features
 
 This is a list of TODOs that I plan to implement. Pull Requests are also
 welcome. Just contact me if you want to contribute.
 
+- Extend for use with placeholders
 - Put this in an npm package with a bin script
-- Use command line arguments to configure input folder, output file etc.
+- Use command line arguments to configure input folder, output file and
+Placeholder separator
+- Port the generating logic to elm in an elm worker and only use node for
+file IO.
+- Add tests

@@ -32,7 +32,7 @@ const getFileContent =
 
 const writeFileContent = content => {
   const generateTrElmModule = (snippets) =>
-    `module Translations
+    `module Translations exposing (..)
 
 ${unionType}
 
