@@ -80,14 +80,22 @@ ${key} lang ${args(matches)} =
   case lang of \n${strings(translations)}`;
 };
 
-const processFileContent = filename => {
-  const lang = getLangFromFile(filename);
-};
+const processFileContent = R.curry((ln, trObject) => {
+  const restructureDataInner = (value, key, prefix) => {
+    if (R.is(Object, value[key])) {
+      restructureDataInner(value[key])
+    }
+    return
+  }
+  const restructureData =
+    (value, key) => restructureDataInner(value, key, prefix = '');
+  return R.mapObjIndexed((value, key) => ({ ln, key, value }))(trObject);
+});
 
 const createFileContentPairs = R.chain(
   filename => R.pipe(
     getFileContent,
-    R.mapObjIndexed((value, key) => ({ ln: getLangFromFile(filename), key, value })),
+    processFileContent(getLangFromFile(filename)),
     R.values
   )(filename)
 );
