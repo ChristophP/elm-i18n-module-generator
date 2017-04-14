@@ -1,8 +1,11 @@
 {
-  "name": "elm-i18n-module-generator",
+  "name": "elm-i18n-gen",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "elm-i18n-gen": "./src/index.js"
+  },
   "scripts": {
     "test": "elm-test"
   },
