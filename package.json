@@ -1,7 +1,7 @@
 {
   "name": "elm-i18n-gen",
   "version": "1.0.0",
-  "description": "",
+  "description": "A generator, which generates an Elm functions from json language files",
   "main": "index.js",
   "bin": {
     "elm-i18n-gen": "./src/index.js"
@@ -14,11 +14,11 @@
   "devDependencies": {
     "debug": "^2.6.3",
     "elm": "^0.18.0",
-    "elm-test": "^0.18.2",
-    "fs-extra": "^2.1.2",
-    "ramda": "^0.23.0"
+    "elm-test": "^0.18.2"
   },
   "dependencies": {
+    "fs-extra": "^2.1.2",
+    "ramda": "^0.23.0",
     "yargs": "^7.0.2"
   }
 }
