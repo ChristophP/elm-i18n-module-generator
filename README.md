@@ -29,7 +29,11 @@ With Placeholders the signature will look more like this:
 
 ### Generating the Translation elm module
 
-Clone this repo. Run the `index.js` Script in the `src` folder.
+Clone this repo. Then install then dependencies.
+
+```npm install```
+
+Run the `index.js` Script in the `src` folder.
 
 ```node src/index.js path/to/localeFolder path/to/output/Translations.elm```
 
@@ -69,50 +73,34 @@ This will generate a `Translations.elm` file with the follwing content.
 ```
 module Translations exposing (..)
 
-
 type Lang
-    = De
-    | En
+  =  De
+  |  En
 
-
-getLnFromCode : String -> Lang
+getLnFromCode: String -> Lang
 getLnFromCode code =
-    case code of
-        "de" ->
-            De
+   case code of
+      "de" -> De
+      "en" -> En
+      _ -> En
 
-        "en" ->
-            En
+hello: Lang -> String
+hello lang  =
+  case lang of
+      De -> "Hallo"
+      En -> "Hello"
 
-
-hello : Lang -> String
-hello lang =
-    case lang of
-        De ->
-            "Hallo"
-
-        En ->
-            "Hello"
-
-
-gooddaySalute : Lang -> String -> String -> String
+gooddaySalute: Lang -> String -> String -> String
 gooddaySalute lang str0 str1 =
-    case lang of
-        De ->
-            "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
+  case lang of
+      De -> "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
+      En -> "Good Day " ++ str0 ++ " " ++ str1 ++ ""
 
-        En ->
-            "Good Day " ++ str0 ++ " " ++ str1 ++ ""
-
-
-tigersRoar : Lang -> String
-tigersRoar lang =
-    case lang of
-        De ->
-            "Brüll!"
-
-        En ->
-            "Roar!"
+tigersRoar: Lang -> String
+tigersRoar lang  =
+  case lang of
+      De -> "Brüll!"
+      En -> "Roar!"
 ```
 
 ### Using the Translations module
