@@ -13,11 +13,12 @@ generator was born.
 
 ## How to use?
 
-Warning: This module currently only supports super simple JSON translation files
-that are only on level deep. I still need to implement something that
-converts nested keys to camel case. Also it only supports placeholders in
-translations that are surrounded by `{{ ... }}`. Translations without
-placeholders will be transformed to a function with this signature.
+Warning: This module currently only supports placeholders in
+translations that are surrounded by `{{ ... }}`.
+
+For every translation string one elm function will be generated.
+Translations without placeholders will be transformed to a function with this
+signature.
 
 `Lang -> String`
 
@@ -30,10 +31,10 @@ With Placeholders the signature will look more like this:
 
 Clone this repo. Run the `index.js` Script in the `src` folder.
 
-```node src/index.js```
+```node src/index.js path/to/localeFolder path/to/output/Translations.elm```
 
-This currently assumes that you have a `locale` folder in the current working
-directory that contains all your JSON translation files like so:
+This currently assumes that you have a `locale` folder that contains all your
+JSON translation files like so:
 
 ```
 locale
@@ -46,14 +47,20 @@ Imagine the translation files look like this:
 ```
 {
   "hello": "Hello",
-  "gooddaySalute": "Good Day {name}"
+  "gooddaySalute": "Good Day {{name}} {{assi}}",
+  "tigers": {
+    "roar": "Roar!"
+  }
 }
 ```
 in english and in german
 ```
 {
   "hello": "Hallo",
-  "gooddaySalute": "Guten Tag {name}"
+  "gooddaySalute": "Guten Tag {{name}} {{assi}}",
+  "tigers": {
+    "roar": "Brüll!"
+  }
 }
 ```
 
@@ -62,27 +69,50 @@ This will generate a `Translations.elm` file with the follwing content.
 ```
 module Translations exposing (..)
 
+
 type Lang
-  =  De
-  |  En
+    = De
+    | En
 
-getLnFromCode: String -> Lang
+
+getLnFromCode : String -> Lang
 getLnFromCode code =
-   case code of
-      "de" -> De
-      "en" -> En
+    case code of
+        "de" ->
+            De
 
-hello: Lang -> String
-hello lang  =
-  case lang of
-      De -> "Hallo"
-      En -> "Hello"
+        "en" ->
+            En
 
-gooddaySalute: Lang -> String -> String -> String
+
+hello : Lang -> String
+hello lang =
+    case lang of
+        De ->
+            "Hallo"
+
+        En ->
+            "Hello"
+
+
+gooddaySalute : Lang -> String -> String -> String
 gooddaySalute lang str0 str1 =
-  case lang of
-      De -> "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
-      En -> "Good Day " ++ str0 ++ " " ++ str1 ++ ""
+    case lang of
+        De ->
+            "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
+
+        En ->
+            "Good Day " ++ str0 ++ " " ++ str1 ++ ""
+
+
+tigersRoar : Lang -> String
+tigersRoar lang =
+    case lang of
+        De ->
+            "Brüll!"
+
+        En ->
+            "Roar!"
 ```
 
 ### Using the Translations module
@@ -113,11 +143,10 @@ view model = div [] [text (Translations.hello model.lang)]
 This is a list of TODOs that I plan to implement. Pull Requests are also
 welcome. Just contact me if you want to contribute.
 
-- camel case nested props
 - Clean up
 - Put this in an npm package with a bin script
-- Use command line arguments to configure input folder, output file and
-Placeholder separator
+- Use command line arguments to configure different placeholder separator
+(__xxx__, {{{xxx}}}, etc)
 - Port the generating logic to elm in an elm worker and only use node for
 file IO.
 - Add tests
