@@ -1,46 +1,30 @@
 module Translations exposing (..)
 
-
 type Lang
-    = De
-    | En
+  =  De
+  |  En
 
-
-getLnFromCode : String -> Lang
+getLnFromCode: String -> Lang
 getLnFromCode code =
-    case code of
-        "de" ->
-            De
+   case code of 
+      "de" -> De
+      "en" -> En
+      _ -> En
 
-        "en" ->
-            En
+hello: Lang -> String
+hello lang  =
+  case lang of 
+      De -> "Hallo"
+      En -> "Hello"
 
-
-hello : Lang -> String
-hello lang =
-    case lang of
-        De ->
-            "Hallo"
-
-        En ->
-            "Hello"
-
-
-gooddaySalute : Lang -> String -> String -> String
+gooddaySalute: Lang -> String -> String -> String
 gooddaySalute lang str0 str1 =
-    case lang of
-        De ->
-            "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
+  case lang of 
+      De -> "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
+      En -> "Good Day " ++ str0 ++ " " ++ str1 ++ ""
 
-        En ->
-            "Good Day " ++ str0 ++ " " ++ str1 ++ ""
-
-
-tigersRoar : Lang -> String
-tigersRoar lang =
-    case lang of
-        De ->
-            "Brüll!"
-
-        En ->
-            "Roar!"
+tigersRoar: Lang -> String
+tigersRoar lang  =
+  case lang of 
+      De -> "Brüll!"
+      En -> "Roar!"

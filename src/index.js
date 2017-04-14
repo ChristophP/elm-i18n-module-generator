@@ -29,7 +29,8 @@ const lnCase = ln => `      "${ln}" -> ${capitalize(ln)}`;
 const getLnFromCode =
 `getLnFromCode: String -> Lang
 getLnFromCode code =
-   case code of \n${R.pipe(R.map(lnCase), R.join('\n'))(languages)}`;
+   case code of \n${R.pipe(R.map(lnCase), R.join('\n'))(languages)}
+      _ -> En`;
 
 const getFileContent =
   filename => fs.readJsonSync(path.join(localeDir, filename), 'utf8');
