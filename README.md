@@ -1,4 +1,4 @@
-# Elm i18n Module Generator
+# Elm i18n Gen (JSON language file to Elm Functions Generator)
 
 This repo provides a script that can generate elm functions from JSON
 translation files.
@@ -137,4 +137,17 @@ welcome. Just contact me if you want to contribute.
 (__xxx__, {{{xxx}}}, etc)
 - Port the generating logic to elm in an elm worker and only use node for
 file IO.
-- Add tests
+
+## Contributing
+
+Run the tests with `npm test`. Submit a PR against the master branch or
+contact me to discuss ideas.
+
+## Credits
+
+This project was inspired by
+[IOSphere/elm-i18n](https://github.com/iosphere/elm-i18n), namely the idea of
+representing translation strings as constants or functions. But it is adapted to
+fit other needs. It differs in the fact that `elm-i18n-gen` generates a single
+elm module from multiple JSON files vs `iosphere/elm-i18n`, which stores its
+translations in elm directly and generates other formats from it.
