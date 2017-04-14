@@ -81,15 +81,19 @@ ${key} lang ${args(matches)} =
 };
 
 const processFileContent = R.curry((ln, trObject) => {
-  const restructureDataInner = (value, key, prefix) => {
-    if (R.is(Object, value[key])) {
-      restructureDataInner(value[key])
-    }
-    return
-  }
-  const restructureData =
-    (value, key) => restructureDataInner(value, key, prefix = '');
-  return R.mapObjIndexed((value, key) => ({ ln, key, value }))(trObject);
+  const restructureData = (value, prefix, initialValue) => R.pipe(
+    R.keys,
+    R.reduce((acc, key) => {
+      const subValue = value[key];
+      const prefixedKey = prefix + (prefix ? capitalize(key) : key);
+      if (R.is(Object, subValue)) {
+        return restructureData(subValue, prefixedKey, acc);
+      }
+      return R.merge(acc, { [prefixedKey]: { ln, key: prefixedKey, value: subValue } });
+    }, initialValue)
+  )(value);
+  return restructureData(trObject, '', {});
+  //return R.mapObjIndexed((value, key) => ({ ln, key, value }))(trObject);
 });
 
 const createFileContentPairs = R.chain(
