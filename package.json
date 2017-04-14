@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "elm-test"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "debug": "^2.6.3",
     "elm": "^0.18.0",
+    "elm-test": "^0.18.2",
     "fs-extra": "^2.1.2",
     "ramda": "^0.23.0"
   },
