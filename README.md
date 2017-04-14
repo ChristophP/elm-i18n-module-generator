@@ -29,16 +29,16 @@ With Placeholders the signature will look more like this:
 
 ### Generating the Translation elm module
 
-Clone this repo. Then install then dependencies.
+Install via npm.
 
-```npm install```
+```npm install -g elm-i18n-gen```
 
-Run the `index.js` Script in the `src` folder.
+Then run it from the command line.
 
-```node src/index.js path/to/localeFolder path/to/output/Translations.elm```
+```elm-i18n-gen path/to/localeFolder path/to/output/Translations.elm```
 
-This currently assumes that you have a `locale` folder that contains all your
-JSON translation files like so:
+This currently assumes that you have a single folder that contains all your
+JSON translation files one the same level like so:
 
 ```
 locale
@@ -132,7 +132,6 @@ This is a list of TODOs that I plan to implement. Pull Requests are also
 welcome. Just contact me if you want to contribute.
 
 - Clean up
-- Put this in an npm package with a bin script
 - Use command line arguments to configure different placeholder separator
 (__xxx__, {{{xxx}}}, etc)
 - Port the generating logic to elm in an elm worker and only use node for
