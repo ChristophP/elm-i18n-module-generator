@@ -148,8 +148,10 @@ file IO.
 
 ## Contributing
 
-Run the tests with `npm test`. Submit a PR against the master branch or
-contact me to discuss ideas.
+If you find bugs are need additional features please open an issue or contact
+me to discuss ideas. If you want to write code check out the repo
+and add your code. Make sure to run the test with `npm test` before and
+add tests wherever it makes sense. Submit a PR against the master branch.
 
 ## Credits
 
