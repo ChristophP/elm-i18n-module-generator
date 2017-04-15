@@ -1,5 +1,7 @@
 # Elm i18n Gen (JSON language file to Elm Functions Generator)
 
+[![npm version](https://badge.fury.io/js/elm-i18n-gen.svg)](https://badge.fury.io/js/elm-i18n-gen)
+
 This tool lets you generate elm functions from JSON translation files.
 
 This tool is for you if ...
