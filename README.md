@@ -1,9 +1,17 @@
 # Elm i18n Gen (JSON language file to Elm Functions Generator)
 
-This repo provides a script that can generate elm functions from JSON
-translation files.
+This tool lets you generate elm functions from JSON translation files.
 
-## Why is this necessary?
+This tool is for you if ...
+
+- you store your translations in the JSON format
+- you want to be able to switch languages during runtime
+- you want to use your translations in your Elm app
+
+(if you need other formats than JSON go to the end of this README to find a
+link to a different tool)
+
+## Why was this tool created?
 
 The company I work for stores all their translation files in JSON and also
 depends on this format, for collaboration with a third party translation
@@ -38,7 +46,8 @@ Then run it from the command line.
 ```elm-i18n-gen path/to/localeFolder path/to/output/Translations.elm```
 
 This currently assumes that you have a single folder that contains all your
-JSON translation files one the same level like so:
+JSON translation files that are name `*.<lang>.json` one the same level like
+so:
 
 ```
 locale
@@ -133,7 +142,7 @@ welcome. Just contact me if you want to contribute.
 
 - Clean up
 - Use command line arguments to configure different placeholder separator
-(__xxx__, {{{xxx}}}, etc)
+(\_\_xxx\_\_, {{{xxx}}}, etc)
 - Port the generating logic to elm in an elm worker and only use node for
 file IO.
 
