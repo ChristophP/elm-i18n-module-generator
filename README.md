@@ -41,11 +41,11 @@ With Placeholders the signature will look more like this:
 
 Install via npm.
 
-```npm install -g elm-i18n-gen```
+`npm install -g elm-i18n-gen`
 
 Then run it from the command line.
 
-```elm-i18n-gen path/to/localeFolder path/to/output/Translations.elm```
+`elm-i18n-gen path/to/localeFolder path/to/output/Translations.elm`
 
 This currently assumes that you have a single folder that contains all your
 JSON translation files that are name `*.<lang>.json` one the same level like
@@ -59,6 +59,7 @@ locale
 ```
 
 Imagine the translation files look like this:
+
 ```
 {
   "hello": "Hello",
@@ -68,7 +69,9 @@ Imagine the translation files look like this:
   }
 }
 ```
+
 in english and in german
+
 ```
 {
   "hello": "Hallo",
@@ -79,7 +82,7 @@ in english and in german
 }
 ```
 
-This will generate a `Translations.elm` file with the follwing content.
+This will generate a `Translations.elm` file with the following content.
 
 ```
 module Translations exposing (..)
@@ -88,12 +91,12 @@ type Lang
   =  De
   |  En
 
-getLnFromCode: String -> Lang
+getLnFromCode: String -> Maybe Lang
 getLnFromCode code =
    case code of
-      "de" -> De
-      "en" -> En
-      _ -> En
+      "de" -> Just De
+      "en" -> Just En
+      _ -> Nothing
 
 hello: Lang -> String
 hello lang  =
@@ -114,11 +117,52 @@ tigersRoar lang  =
       En -> "Roar!"
 ```
 
+#### Default Lang
+
+In case you have missing translations for some languages, it is possible to use the command-line parameter `--default` as listed below.
+
+`elm-i18n-gen --default DE path/to/localeFolder path/to/output/Translations.elm`
+
+This will result in the following code:
+
+```
+module Translations exposing (..)
+
+type Lang
+  =  De
+  |  En
+
+getLnFromCode: String -> Maybe Lang
+getLnFromCode code =
+   case code of
+      "de" -> Just De
+      "en" -> Just En
+      _ -> Nothing
+
+hello: Lang -> String
+hello lang  =
+  case lang of
+      En -> "Hello"
+      _ -> "Hallo"
+
+gooddaySalute: Lang -> String -> String -> String
+gooddaySalute lang str0 str1 =
+  case lang of
+      En -> "Good Day " ++ str0 ++ " " ++ str1 ++ ""
+      _ -> "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
+
+tigersRoar: Lang -> String
+tigersRoar lang  =
+  case lang of
+      En -> "Roar!"
+      _ -> "Brüll!"
+```
+
 ### Using the Translations module
 
 Import the generated module in your elm code like this.
 
-```import Translations```
+`import Translations`
 
 Initialize your Model with a language, it is a union type generated from your
 language files:
@@ -132,6 +176,7 @@ initialModel =
 ```
 
 Then in your view function do this:
+
 ```
 view: Model -> Html Msg
 view model = div [] [text (Translations.hello model.lang)]
@@ -144,9 +189,9 @@ welcome. Just contact me if you want to contribute.
 
 - Clean up
 - Use command line arguments to configure different placeholder separator
-(\_\_xxx\_\_, {{{xxx}}}, etc)
+  (\_\_xxx\_\_, {{{xxx}}}, etc)
 - Port the generating logic to elm in an elm worker and only use node for
-file IO.
+  file IO.
 
 ## Contributing
 
