@@ -60,7 +60,7 @@ locale
 
 Imagine the translation files look like this:
 
-```
+```json
 {
   "hello": "Hello",
   "gooddaySalute": "Good Day {{name}} {{assi}}",
@@ -72,7 +72,7 @@ Imagine the translation files look like this:
 
 in english and in german
 
-```
+```elm
 {
   "hello": "Hallo",
   "gooddaySalute": "Guten Tag {{name}} {{assi}}",
@@ -84,37 +84,56 @@ in english and in german
 
 This will generate a `Translations.elm` file with the following content.
 
-```
+```elm
 module Translations exposing (..)
 
+
 type Lang
-  =  De
-  |  En
+    = De
+    | En
 
-getLnFromCode: String -> Maybe Lang
+
+getLnFromCode : String -> Maybe Lang
 getLnFromCode code =
-   case code of
-      "de" -> Just De
-      "en" -> Just En
-      _ -> Nothing
+    case code of
+        "de" ->
+            Just De
 
-hello: Lang -> String
-hello lang  =
-  case lang of
-      De -> "Hallo"
-      En -> "Hello"
+        "en" ->
+            Just En
 
-gooddaySalute: Lang -> String -> String -> String
+        _ ->
+            Nothing
+
+
+hello : Lang -> String
+hello lang =
+    case lang of
+        De ->
+            "Hallo"
+
+        En ->
+            "Hello"
+
+
+gooddaySalute : Lang -> String -> String -> String
 gooddaySalute lang str0 str1 =
-  case lang of
-      De -> "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
-      En -> "Good Day " ++ str0 ++ " " ++ str1 ++ ""
+    case lang of
+        De ->
+            "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
 
-tigersRoar: Lang -> String
-tigersRoar lang  =
-  case lang of
-      De -> "Brüll!"
-      En -> "Roar!"
+        En ->
+            "Good Day " ++ str0 ++ " " ++ str1 ++ ""
+
+
+tigersRoar : Lang -> String
+tigersRoar lang =
+    case lang of
+        De ->
+            "Brüll!"
+
+        En ->
+            "Roar!"
 ```
 
 #### Default Lang
@@ -125,37 +144,56 @@ In case you have missing translations for some languages, it is possible to use 
 
 This will result in the following code:
 
-```
+```elm
 module Translations exposing (..)
 
+
 type Lang
-  =  De
-  |  En
+    = De
+    | En
 
-getLnFromCode: String -> Maybe Lang
+
+getLnFromCode : String -> Maybe Lang
 getLnFromCode code =
-   case code of
-      "de" -> Just De
-      "en" -> Just En
-      _ -> Nothing
+    case code of
+        "de" ->
+            Just De
 
-hello: Lang -> String
-hello lang  =
-  case lang of
-      En -> "Hello"
-      _ -> "Hallo"
+        "en" ->
+            Just En
 
-gooddaySalute: Lang -> String -> String -> String
+        _ ->
+            Nothing
+
+
+hello : Lang -> String
+hello lang =
+    case lang of
+        En ->
+            "Hello"
+
+        _ ->
+            "Hallo"
+
+
+gooddaySalute : Lang -> String -> String -> String
 gooddaySalute lang str0 str1 =
-  case lang of
-      En -> "Good Day " ++ str0 ++ " " ++ str1 ++ ""
-      _ -> "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
+    case lang of
+        En ->
+            "Good Day " ++ str0 ++ " " ++ str1 ++ ""
 
-tigersRoar: Lang -> String
-tigersRoar lang  =
-  case lang of
-      En -> "Roar!"
-      _ -> "Brüll!"
+        _ ->
+            "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
+
+
+tigersRoar : Lang -> String
+tigersRoar lang =
+    case lang of
+        En ->
+            "Roar!"
+
+        _ ->
+            "Brüll!"
 ```
 
 ### Using the Translations module
@@ -167,19 +205,20 @@ Import the generated module in your elm code like this.
 Initialize your Model with a language, it is a union type generated from your
 language files:
 
-```
-initialModel: Model
+```elm
+initialModel : Model
 initialModel =
-  { tigers: List Tiger
-  , lang: Translations.En -- <---- add language type
-  }
+    { tigers = List Tiger
+    , lang = Translations.En -- <---- add language type
+    }
 ```
 
 Then in your view function do this:
 
-```
-view: Model -> Html Msg
-view model = div [] [text (Translations.hello model.lang)]
+```elm
+view : Model -> Html Msg
+view model =
+    div [] [ text (Translations.hello model.lang) ]
 ```
 
 ## Future Features
