@@ -13,8 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "debug": "^2.6.3",
-    "elm": "^0.18.0",
-    "elm-test": "^0.18.2"
+    "elm": "^0.19.1-5"
   },
   "dependencies": {
     "fs-extra": "^2.1.2",
