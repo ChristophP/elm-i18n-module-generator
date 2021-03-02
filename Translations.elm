@@ -11,7 +11,7 @@ Otherwise `Nothing` is returned.
 -}
 getLnFromCode : String -> Maybe Lang
 getLnFromCode code =
-    case String.toLower code of 
+    case String.toLower code of
         "de" ->
             Just De
 
@@ -26,7 +26,7 @@ getLnFromCode code =
 -}
 getCodeFromLn : Lang -> String
 getCodeFromLn lang =
-    case lang of 
+    case lang of
         De ->
             "de"
 
@@ -36,30 +36,29 @@ getCodeFromLn lang =
 
 hello : Lang -> String
 hello lang =
-    case lang of 
+    case lang of
         De ->
             "Hallo"
 
-        En ->
+        _ ->
             "Hello"
 
 
 gooddaySalute : Lang -> String -> String -> String
 gooddaySalute lang str0 str1 =
-    case lang of 
+    case lang of
         De ->
             "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
 
-        En ->
+        _ ->
             "Good Day " ++ str0 ++ " " ++ str1 ++ ""
 
 
 tigersRoar : Lang -> String
 tigersRoar lang =
-    case lang of 
+    case lang of
         De ->
             "Brüll!"
 
-        En ->
+        _ ->
             "Roar!"
-

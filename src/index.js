@@ -11,10 +11,30 @@ const [
   trFile = path.join(__dirname, '../Translations.elm'),
 ] = argv._
 
+let defaultLang = argv.d || argv.default
+
+if (argv.h || argv.help) {
+  console.log('elm-i18n-gen\n')
+  console.log('usage: elm-i18n-gen -d EN locale\n')
+  console.log('-h --help         print this help')
+  console.log('-d --default      define a default language')
+  process.exit(0)
+}
+
 const files = fs.readdirSync(localeDir)
 const getLangFromFile = R.pipe(R.split('.'), R.slice(1, 2), R.head)
-const languages = R.map(getLangFromFile)(files)
+let languages = R.map(getLangFromFile)(files)
 const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1)
+
+if (typeof defaultLang === 'string') {
+  defaultLang = defaultLang.toLowerCase()
+
+  languages = languages.filter((e) => {
+    return e !== defaultLang
+  })
+
+  languages.push(defaultLang)
+}
 
 const tags = R.pipe(
   R.addIndex(R.map)((tag, index) => {
@@ -116,6 +136,7 @@ ${key} lang ${args(matches)}=
 }
 
 const processFileContent = R.curry((ln, trObject) => {
+  ln = ln === defaultLang ? '_' : ln
   const restructureData = (value, prefix, initialValue) =>
     R.pipe(
       R.keys,
@@ -142,12 +163,30 @@ const createFileContentPairs = R.chain((filename) =>
   )(filename),
 )
 
-const fileContentMap = R.pipe(
+let fileContentMap = R.pipe(
   createFileContentPairs,
   R.groupBy(R.prop('key')),
 )(files)
 
 const createSnippets = R.pipe(R.mapObjIndexed(generateElmFunctions), R.values)
+
+Array.prototype.sortBy = function (p) {
+  return this.slice(0).sort(function (a, b) {
+    if (a[p] === '_') {
+      return 1
+    } else if (b[p] === '_') {
+      return -1
+    }
+
+    return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0
+  })
+}
+
+for (const [key, value] of Object.entries(fileContentMap)) {
+  fileContentMap[key] = value.sortBy('ln')
+}
+
+console.log(fileContentMap)
 
 writeFileContent(createSnippets(fileContentMap))
 process.exit(0)
