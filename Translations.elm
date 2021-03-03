@@ -1,5 +1,12 @@
 module Translations exposing (..)
 
+{-| This file was automatically generated with elm-i18n-gen.
+For more in information visit:
+
+<https://github.com/ChristophP/elm-i18n-module-generator>
+
+-}
+
 
 type Lang
     = De
@@ -11,7 +18,7 @@ Otherwise `Nothing` is returned.
 -}
 getLnFromCode : String -> Maybe Lang
 getLnFromCode code =
-    case String.toLower code of
+    case String.toLower code of 
         "de" ->
             Just De
 
@@ -26,7 +33,7 @@ getLnFromCode code =
 -}
 getCodeFromLn : Lang -> String
 getCodeFromLn lang =
-    case lang of
+    case lang of 
         De ->
             "de"
 
@@ -36,7 +43,7 @@ getCodeFromLn lang =
 
 hello : Lang -> String
 hello lang =
-    case lang of
+    case lang of 
         De ->
             "Hallo"
 
@@ -46,7 +53,7 @@ hello lang =
 
 gooddaySalute : Lang -> String -> String -> String
 gooddaySalute lang str0 str1 =
-    case lang of
+    case lang of 
         De ->
             "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
 
@@ -56,9 +63,10 @@ gooddaySalute lang str0 str1 =
 
 tigersRoar : Lang -> String
 tigersRoar lang =
-    case lang of
+    case lang of 
         De ->
             "Brüll!"
 
         _ ->
             "Roar!"
+

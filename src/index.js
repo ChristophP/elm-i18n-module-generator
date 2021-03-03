@@ -80,6 +80,13 @@ const writeFileContent = (content) => {
   const generateTrElmModule = (snippets) =>
     `module Translations exposing (..)
 
+{-| This file was automatically generated with elm-i18n-gen.
+For more in information visit:
+
+<https://github.com/ChristophP/elm-i18n-module-generator>
+
+-}
+
 
 ${unionType}
 
@@ -185,8 +192,6 @@ Array.prototype.sortBy = function (p) {
 for (const [key, value] of Object.entries(fileContentMap)) {
   fileContentMap[key] = value.sortBy('ln')
 }
-
-console.log(fileContentMap)
 
 writeFileContent(createSnippets(fileContentMap))
 process.exit(0)
