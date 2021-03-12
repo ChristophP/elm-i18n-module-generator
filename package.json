@@ -7,13 +7,20 @@
     "elm-i18n-gen": "./src/index.js"
   },
   "scripts": {
-    "test": "elm-test"
+    "test": "elm-test",
+    "lint": "eslint src"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "debug": "^2.6.3",
-    "elm": "^0.19.1-5"
+    "elm": "^0.19.1-5",
+    "eslint": "^7.21.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "prettier": "^2.2.1"
   },
   "dependencies": {
     "fs-extra": "^2.1.2",
