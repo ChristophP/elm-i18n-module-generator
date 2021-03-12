@@ -47,7 +47,7 @@ hello lang =
         De ->
             "Hallo"
 
-        _ ->
+        En ->
             "Hello"
 
 
@@ -57,7 +57,7 @@ gooddaySalute lang str0 str1 =
         De ->
             "Guten Tag " ++ str0 ++ " " ++ str1 ++ ""
 
-        _ ->
+        En ->
             "Good Day " ++ str0 ++ " " ++ str1 ++ ""
 
 
@@ -67,6 +67,6 @@ tigersRoar lang =
         De ->
             "Brüll!"
 
-        _ ->
+        En ->
             "Roar!"
 

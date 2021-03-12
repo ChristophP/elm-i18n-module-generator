@@ -11,7 +11,7 @@ const [
   trFile = path.join(__dirname, "../Translations.elm"),
 ] = argv._;
 
-let defaultLang = argv.d || argv.default;
+const defaultLang = argv.d || argv.default;
 
 if (argv.h || argv.help) {
   console.log("elm-i18n-gen\n");
@@ -23,16 +23,16 @@ if (argv.h || argv.help) {
 
 const files = fs.readdirSync(localeDir);
 const getLangFromFile = R.pipe(R.split("."), R.slice(1, 2), R.head);
-let languages = R.map(getLangFromFile)(files);
+const languagesFromFile = R.map(getLangFromFile)(files);
 const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
-if (typeof defaultLang === "string") {
-  defaultLang = defaultLang.toLowerCase();
-
-  languages = languages.filter((e) => e !== defaultLang);
-
-  languages.push(defaultLang);
-}
+const languages =
+  typeof defaultLang === "string"
+    ? [
+        ...languagesFromFile.filter((e) => e !== defaultLang.toLowerCase()),
+        defaultLang.toLowerCase(),
+      ]
+    : languagesFromFile;
 
 const tags = R.pipe(
   R.addIndex(R.map)((tag, index) => {
@@ -168,15 +168,8 @@ const createFileContentPairs = R.chain((filename) =>
   )(filename)
 );
 
-const fileContentMap = R.pipe(
-  createFileContentPairs,
-  R.groupBy(R.prop("key"))
-)(files);
-
-const createSnippets = R.pipe(R.mapObjIndexed(generateElmFunctions), R.values);
-
-Array.prototype.sortBy = function (p) {
-  return this.slice(0).sort((a, b) => {
+const sortBy = (p, array) =>
+  array.slice(0).sort((a, b) => {
     if (a[p] === "_") {
       return 1;
     }
@@ -186,11 +179,14 @@ Array.prototype.sortBy = function (p) {
 
     return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0;
   });
-};
 
-for (const [key, value] of Object.entries(fileContentMap)) {
-  fileContentMap[key] = value.sortBy("ln");
-}
+const fileContentMap = R.pipe(
+  createFileContentPairs,
+  R.groupBy(R.prop("key")),
+  R.map((list) => sortBy("ln", list))
+)(files);
+
+const createSnippets = R.pipe(R.mapObjIndexed(generateElmFunctions), R.values);
 
 writeFileContent(createSnippets(fileContentMap));
 process.exit(0);
