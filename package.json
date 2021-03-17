@@ -1,10 +1,10 @@
 {
   "name": "elm-i18n-gen",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "A generator, which generates an Elm functions from json language files",
   "main": "index.js",
   "bin": {
-    "elm-i18n-gen": "./src/index.js"
+    "elm-i18n-gen": "src/index.js"
   },
   "scripts": {
     "test": "elm-test"
